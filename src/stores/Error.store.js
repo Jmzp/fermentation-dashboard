@@ -4,11 +4,10 @@ class ErrorStore {
   currentError = '';
 
   constructor() {
-    makeAutoObservable(this,
-      {
-        currentError: observable,
-        setCurrentError: action,
-      });
+    makeAutoObservable(this, {
+      currentError: observable,
+      setCurrentError: action,
+    });
   }
 
   setCurrentError(error) {

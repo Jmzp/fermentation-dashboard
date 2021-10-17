@@ -54,7 +54,6 @@ const time = [
   46,
   47,
   48,
-
 ];
 const ph = [
   5.5,

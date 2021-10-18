@@ -105,19 +105,7 @@ const ph = [
   4.14,
   4.15,
 ];
-
-const data = {
-  labels: time,
-  datasets: [
-    {
-      label: 'pH',
-      data: ph,
-      fill: false,
-      backgroundColor: 'rgba(245, 162, 22, 0.96)',
-      borderColor: 'rgba(168, 106, 0, 0.2)',
-    },
-  ],
-};
+const temperature = ph.reverse();
 
 const options = {
   scales: {
@@ -130,6 +118,33 @@ const options = {
 
 const LineChart = () => {
   const classes = useStyles();
+
+  const dataPhTime = {
+    labels: time,
+    datasets: [
+      {
+        label: 'pH',
+        data: ph,
+        fill: false,
+        backgroundColor: 'rgba(245, 162, 22, 0.96)',
+        borderColor: 'rgba(168, 106, 0, 0.2)',
+      },
+    ],
+  };
+
+  const dataTemperatureTime = {
+    labels: time,
+    datasets: [
+      {
+        label: 'temperature',
+        data: temperature,
+        fill: false,
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgba(255, 99, 132, 0.2)',
+      },
+    ],
+  };
+
   return (
     <>
       <CssBaseline />
@@ -139,7 +154,15 @@ const LineChart = () => {
             <div>
               <h1 className={classes.title}>pH vs Tiempo (Horas)</h1>
             </div>
-            <Line data={data} options={options} />
+            <Line data={dataPhTime} options={options} />
+          </CardContent>
+        </Card>
+        <Card className={classes.cardContainer}>
+          <CardContent>
+            <div>
+              <h1 className={classes.title}>Temperatur vs Tiempo (Horas)</h1>
+            </div>
+            <Line data={dataTemperatureTime} options={options} />
           </CardContent>
         </Card>
       </Container>

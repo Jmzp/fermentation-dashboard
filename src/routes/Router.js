@@ -1,14 +1,15 @@
 import React from 'react';
 import {
-  BrowserRouter, Switch, Route, Redirect,
+  BrowserRouter, Switch, Route,
 } from 'react-router-dom';
-import { Home, PageError } from '../pages';
+import { Home, PageError, Login } from '../pages';
+import { ProtectedRoute } from '../components';
 
 export default () => (
   <BrowserRouter>
-    <Redirect from="/" to="/home" />
     <Switch>
-      <Route path="/home" component={Home} exact />
+      <ProtectedRoute path="/home" component={Home} />
+      <Route path="/" component={Login} exact />
       <Route component={PageError} />
     </Switch>
   </BrowserRouter>

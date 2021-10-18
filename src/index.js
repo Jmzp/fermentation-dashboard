@@ -1,14 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import App from './App';
+import Auth0 from './auth/Auth0';
 // import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <Router>
+    <Auth0>
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    </Auth0>
+  </Router>,
   document.getElementById('root'),
 );
 

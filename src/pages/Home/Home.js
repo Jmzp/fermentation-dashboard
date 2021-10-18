@@ -54,7 +54,6 @@ const time = [
   46,
   47,
   48,
-
 ];
 const ph = [
   5.5,
@@ -111,7 +110,7 @@ const data = {
   labels: time,
   datasets: [
     {
-      label: 'PH',
+      label: 'pH',
       data: ph,
       fill: false,
       backgroundColor: 'rgba(245, 162, 22, 0.96)',
@@ -125,8 +124,7 @@ const options = {
     x: {
       beginAtZero: false,
     },
-    y: {
-    },
+    y: {},
   },
 };
 
@@ -139,7 +137,7 @@ const LineChart = () => {
         <Card className={classes.cardContainer}>
           <CardContent>
             <div>
-              <h1>pH vs Tiempo (Horas)</h1>
+              <h1 className={classes.title}>pH vs Tiempo (Horas)</h1>
             </div>
             <Line data={data} options={options} />
           </CardContent>

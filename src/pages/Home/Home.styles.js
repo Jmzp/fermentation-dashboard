@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core';
+import { TextStyles } from '../../theme';
 
 const useStyles = makeStyles({
   mainContainer: {
@@ -10,6 +11,9 @@ const useStyles = makeStyles({
   },
   cardContainer: {
     marginTop: '20px',
+  },
+  title: {
+    ...TextStyles.poppinsRegularText,
   },
 });
 

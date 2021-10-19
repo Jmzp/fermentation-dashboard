@@ -4,6 +4,7 @@ import {
   Card, CardContent, Container, CssBaseline,
 } from '@material-ui/core';
 import useStyles from './Home.styles';
+import HeaderBar from '../../components/HeaderBar';
 
 const time = [
   1,
@@ -133,6 +134,7 @@ const LineChart = () => {
   return (
     <>
       <CssBaseline />
+      <HeaderBar />
       <Container>
         <Card className={classes.cardContainer}>
           <CardContent>

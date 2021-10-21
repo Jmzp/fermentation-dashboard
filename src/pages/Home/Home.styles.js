@@ -6,11 +6,10 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     flex: 1,
-    height: '100%',
-    padding: '20px 50px',
+    paddingBottom: 20,
   },
   cardContainer: {
-    marginTop: '20px',
+    marginTop: 20,
   },
   title: {
     ...TextStyles.poppinsRegularText,

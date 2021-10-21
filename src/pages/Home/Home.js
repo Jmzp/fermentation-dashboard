@@ -157,7 +157,7 @@ const Home = () => {
   return (
     <>
       <CssBaseline />
-      <Container>
+      <Container className={classes.mainContainer}>
         <Card className={classes.cardContainer}>
           <CardContent>
             <div className={classes.dateRangeContainer}>

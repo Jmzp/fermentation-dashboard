@@ -106,7 +106,7 @@ const ph = [
   4.14,
   4.15,
 ];
-const temperature = ph.reverse();
+const temperature = [...ph].reverse();
 
 const options = {
   scales: {

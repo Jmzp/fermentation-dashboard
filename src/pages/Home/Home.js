@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
   Card, CardContent, Container, CssBaseline,
 } from '@material-ui/core';
+import { DatePicker } from '@material-ui/pickers';
 import useStyles from './Home.styles';
 
 const time = [
@@ -116,8 +117,16 @@ const options = {
   },
 };
 
-const LineChart = () => {
+const TODAY = new Date();
+const TOMORROW = new Date(TODAY);
+TOMORROW.setDate(TOMORROW.getDate() + 3);
+
+const Home = () => {
   const classes = useStyles();
+  const [phVsTimeStartDate, setPhVsTimeStartDate] = useState(TODAY);
+  const [phVsTimeEndDate, setPhVsTimeEndDate] = useState(TOMORROW);
+  const [tempVsTimeStartDate, setTempVsTimeStartDate] = useState(TODAY);
+  const [tempVsTimeEndDate, setTempVsTimeEndDate] = useState(TOMORROW);
 
   const dataPhTime = {
     labels: time,
@@ -151,6 +160,28 @@ const LineChart = () => {
       <Container>
         <Card className={classes.cardContainer}>
           <CardContent>
+            <div className={classes.dateRangeContainer}>
+              <div className={classes.dateContainer}>
+                <DatePicker
+                  openTo="date"
+                  label="Inicio"
+                  format="dddd/MM/yyyy"
+                  views={['year', 'month', 'date']}
+                  value={phVsTimeStartDate}
+                  onChange={setPhVsTimeStartDate}
+                />
+              </div>
+              <div className={classes.dateContainer}>
+                <DatePicker
+                  openTo="date"
+                  label="Fin"
+                  format="dddd/MM/yyyy"
+                  views={['year', 'month', 'date']}
+                  value={phVsTimeEndDate}
+                  onChange={setPhVsTimeEndDate}
+                />
+              </div>
+            </div>
             <div>
               <h1 className={classes.title}>pH vs Tiempo (Horas)</h1>
             </div>
@@ -159,6 +190,28 @@ const LineChart = () => {
         </Card>
         <Card className={classes.cardContainer}>
           <CardContent>
+            <div className={classes.dateRangeContainer}>
+              <div className={classes.dateContainer}>
+                <DatePicker
+                  openTo="date"
+                  label="Inicio"
+                  format="dddd/MM/yyyy"
+                  views={['year', 'month', 'date']}
+                  value={tempVsTimeStartDate}
+                  onChange={setTempVsTimeStartDate}
+                />
+              </div>
+              <div className={classes.dateContainer}>
+                <DatePicker
+                  openTo="date"
+                  label="Fin"
+                  format="dddd/MM/yyyy"
+                  views={['year', 'month', 'date']}
+                  value={tempVsTimeEndDate}
+                  onChange={setTempVsTimeEndDate}
+                />
+              </div>
+            </div>
             <div>
               <h1 className={classes.title}>Temperatur vs Tiempo (Horas)</h1>
             </div>
@@ -170,4 +223,4 @@ const LineChart = () => {
   );
 };
 
-export default LineChart;
+export default Home;

@@ -15,6 +15,15 @@ const useStyles = makeStyles({
   title: {
     ...TextStyles.poppinsRegularText,
   },
+  dateRangeContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginBottom: 20,
+  },
+  dateContainer: {
+    marginLeft: 25,
+  },
 });
 
 export default useStyles;

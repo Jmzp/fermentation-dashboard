@@ -21,6 +21,9 @@ const useStyles = makeStyles({
 const HeaderBar = () => {
   const { logout } = useAuth0();
   const classes = useStyles();
+  const onClickButton = () => logout({
+    returnTo: window.location.origin,
+  });
 
   return (
     <AppBar position="static">
@@ -30,9 +33,7 @@ const HeaderBar = () => {
         </h3>
         <Button
           color="inherit"
-          onClick={() => logout({
-            returnTo: window.location.origin,
-          })}
+          onClick={() => onClickButton()}
         >
           Cerrar Sesión
         </Button>

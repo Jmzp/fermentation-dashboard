@@ -213,7 +213,7 @@ const Home = () => {
               </div>
             </div>
             <div>
-              <h1 className={classes.title}>Temperatur vs Tiempo (Horas)</h1>
+              <h1 className={classes.title}>Temperatura vs Tiempo (Horas)</h1>
             </div>
             <Line data={dataTemperatureTime} options={options} />
           </CardContent>

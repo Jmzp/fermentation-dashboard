@@ -5,6 +5,7 @@ import {
 } from '@material-ui/core';
 import { DatePicker } from '@material-ui/pickers';
 import useStyles from './Home.styles';
+import HeaderBar from '../../components/HeaderBar';
 
 const time = [
   1,
@@ -157,6 +158,7 @@ const Home = () => {
   return (
     <>
       <CssBaseline />
+      <HeaderBar />
       <Container className={classes.mainContainer}>
         <Card className={classes.cardContainer}>
           <CardContent>

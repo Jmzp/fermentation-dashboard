@@ -8,6 +8,12 @@ const useStyles = makeStyles({
     flex: 1,
     paddingBottom: 20,
   },
+  circularProgressContainer: {
+    display: 'flex',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   cardContainer: {
     marginTop: 20,
   },

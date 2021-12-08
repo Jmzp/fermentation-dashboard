@@ -2,6 +2,7 @@ import React from 'react';
 import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import moment from 'moment';
+import { observer } from 'mobx-react';
 import { Router } from './routes';
 import 'moment/locale/es';
 
@@ -15,4 +16,4 @@ export const App = () => (
   </>
 );
 
-export default App;
+export default observer(App);

@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
-  Card, CardContent, Container, CssBaseline,
+  Card, CardContent, CircularProgress, Container, CssBaseline, Snackbar,
 } from '@material-ui/core';
 import { DatePicker } from '@material-ui/pickers';
+import { observer } from 'mobx-react';
 import useStyles from './Home.styles';
 import HeaderBar from '../../components/HeaderBar';
+import { useStores } from '../../stores';
+import { Alert } from '../../components';
 
+const HIDE_DURATION = 6000;
 const time = [
   1,
   2,
@@ -124,12 +128,56 @@ TOMORROW.setDate(TOMORROW.getDate() + 3);
 
 const Home = () => {
   const classes = useStyles();
+  const [isLoading, setIsLoading] = useState(false);
   const [phVsTimeStartDate, setPhVsTimeStartDate] = useState(TODAY);
   const [phVsTimeEndDate, setPhVsTimeEndDate] = useState(TOMORROW);
   const [tempVsTimeStartDate, setTempVsTimeStartDate] = useState(TODAY);
   const [tempVsTimeEndDate, setTempVsTimeEndDate] = useState(TOMORROW);
+  const [isSnackErrorVisible, setSnackErrorVisibility] = useState(false);
+  const { errorStore, phStore, temperatureStore } = useStores();
 
-  const dataPhTime = {
+  const handleCloseSnackError = (_event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    errorStore.setCurrentError('');
+    setSnackErrorVisibility(false);
+  };
+
+  const getPhFromInterval = async () => {
+    setIsLoading(true);
+    phStore.loadPhByInterval(phVsTimeStartDate, phVsTimeEndDate);
+    setIsLoading(false);
+  };
+
+  const getTemperatureFromInterval = async () => {
+    setIsLoading(true);
+    temperatureStore.loadTemperatureByInterval(tempVsTimeStartDate, tempVsTimeEndDate);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    const asyncFunction = async () => {
+      await getPhFromInterval();
+    };
+    asyncFunction();
+  }, [phVsTimeStartDate, phVsTimeEndDate]);
+
+  useEffect(() => {
+    const asyncFunction = async () => {
+      await getTemperatureFromInterval();
+    };
+    asyncFunction();
+  }, [tempVsTimeStartDate, tempVsTimeEndDate]);
+
+  useEffect(() => {
+    const { currentError } = errorStore;
+    if (currentError) {
+      setSnackErrorVisibility(true);
+    }
+  }, [errorStore.currentError]);
+
+  const dataPhTimeConfig = useMemo(() => ({
     labels: time,
     datasets: [
       {
@@ -140,9 +188,9 @@ const Home = () => {
         borderColor: 'rgba(168, 106, 0, 0.2)',
       },
     ],
-  };
+  }), []);
 
-  const dataTemperatureTime = {
+  const dataTemperatureTimeConfig = useMemo(() => ({
     labels: time,
     datasets: [
       {
@@ -153,76 +201,93 @@ const Home = () => {
         borderColor: 'rgba(255, 99, 132, 0.2)',
       },
     ],
-  };
+  }), []);
 
   return (
     <>
       <CssBaseline />
       <HeaderBar />
       <Container className={classes.mainContainer}>
-        <Card className={classes.cardContainer}>
-          <CardContent>
-            <div className={classes.dateRangeContainer}>
-              <div className={classes.dateContainer}>
-                <DatePicker
-                  openTo="date"
-                  label="Inicio"
-                  format="dddd/MM/yyyy"
-                  views={['year', 'month', 'date']}
-                  value={phVsTimeStartDate}
-                  onChange={setPhVsTimeStartDate}
-                />
-              </div>
-              <div className={classes.dateContainer}>
-                <DatePicker
-                  openTo="date"
-                  label="Fin"
-                  format="dddd/MM/yyyy"
-                  views={['year', 'month', 'date']}
-                  value={phVsTimeEndDate}
-                  onChange={setPhVsTimeEndDate}
-                />
-              </div>
-            </div>
-            <div>
-              <h1 className={classes.title}>pH vs Tiempo (Horas)</h1>
-            </div>
-            <Line data={dataPhTime} options={options} />
-          </CardContent>
-        </Card>
-        <Card className={classes.cardContainer}>
-          <CardContent>
-            <div className={classes.dateRangeContainer}>
-              <div className={classes.dateContainer}>
-                <DatePicker
-                  openTo="date"
-                  label="Inicio"
-                  format="dddd/MM/yyyy"
-                  views={['year', 'month', 'date']}
-                  value={tempVsTimeStartDate}
-                  onChange={setTempVsTimeStartDate}
-                />
-              </div>
-              <div className={classes.dateContainer}>
-                <DatePicker
-                  openTo="date"
-                  label="Fin"
-                  format="dddd/MM/yyyy"
-                  views={['year', 'month', 'date']}
-                  value={tempVsTimeEndDate}
-                  onChange={setTempVsTimeEndDate}
-                />
-              </div>
-            </div>
-            <div>
-              <h1 className={classes.title}>Temperatura vs Tiempo (Horas)</h1>
-            </div>
-            <Line data={dataTemperatureTime} options={options} />
-          </CardContent>
-        </Card>
+        {isLoading ? (
+          <div className={classes.circularProgressContainer}>
+            <CircularProgress />
+          </div>
+        ) : (
+          <>
+            <Card className={classes.cardContainer}>
+              <CardContent>
+                <div className={classes.dateRangeContainer}>
+                  <div className={classes.dateContainer}>
+                    <DatePicker
+                      openTo="date"
+                      label="Inicio"
+                      format="dddd/MM/yyyy"
+                      views={['year', 'month', 'date']}
+                      value={phVsTimeStartDate}
+                      onChange={setPhVsTimeStartDate}
+                    />
+                  </div>
+                  <div className={classes.dateContainer}>
+                    <DatePicker
+                      openTo="date"
+                      label="Fin"
+                      format="dddd/MM/yyyy"
+                      views={['year', 'month', 'date']}
+                      value={phVsTimeEndDate}
+                      onChange={setPhVsTimeEndDate}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <h1 className={classes.title}>pH vs Tiempo (Horas)</h1>
+                </div>
+                <Line data={dataPhTimeConfig} options={options} />
+              </CardContent>
+            </Card>
+            <Card className={classes.cardContainer}>
+              <CardContent>
+                <div className={classes.dateRangeContainer}>
+                  <div className={classes.dateContainer}>
+                    <DatePicker
+                      openTo="date"
+                      label="Inicio"
+                      format="dddd/MM/yyyy"
+                      views={['year', 'month', 'date']}
+                      value={tempVsTimeStartDate}
+                      onChange={setTempVsTimeStartDate}
+                    />
+                  </div>
+                  <div className={classes.dateContainer}>
+                    <DatePicker
+                      openTo="date"
+                      label="Fin"
+                      format="dddd/MM/yyyy"
+                      views={['year', 'month', 'date']}
+                      value={tempVsTimeEndDate}
+                      onChange={setTempVsTimeEndDate}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <h1 className={classes.title}>Temperatura vs Tiempo (Horas)</h1>
+                </div>
+                <Line data={dataTemperatureTimeConfig} options={options} />
+              </CardContent>
+            </Card>
+          </>
+        )}
       </Container>
+      <Snackbar
+        open={isSnackErrorVisible}
+        autoHideDuration={HIDE_DURATION}
+        onClose={handleCloseSnackError}
+      >
+        <Alert onClose={handleCloseSnackError} severity="error">
+          {errorStore.currentError}
+        </Alert>
+      </Snackbar>
     </>
   );
 };
 
-export default Home;
+export default observer(Home);

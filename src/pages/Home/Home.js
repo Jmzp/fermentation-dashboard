@@ -9,6 +9,7 @@ import useStyles from './Home.styles';
 import HeaderBar from '../../components/HeaderBar';
 import { useStores } from '../../stores';
 import { Alert } from '../../components';
+import { CONSTANTS } from '../../constants';
 
 const HIDE_DURATION = 6000;
 const time = [
@@ -137,7 +138,7 @@ const Home = () => {
   const { errorStore, phStore, temperatureStore } = useStores();
 
   const handleCloseSnackError = (_event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === CONSTANTS.CLICKAWAY) {
       return;
     }
     errorStore.setCurrentError('');

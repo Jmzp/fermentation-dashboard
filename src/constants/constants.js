@@ -1,5 +1,5 @@
-const constant = 'CONSTANTE';
+const CLICKAWAY = 'clickaway';
 
 export default {
-  constant,
+  CLICKAWAY,
 };

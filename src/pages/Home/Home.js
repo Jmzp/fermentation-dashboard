@@ -6,9 +6,8 @@ import {
 import { DatePicker } from '@material-ui/pickers';
 import { observer } from 'mobx-react';
 import useStyles from './Home.styles';
-import HeaderBar from '../../components/HeaderBar';
 import { useStores } from '../../stores';
-import { Alert } from '../../components';
+import { Alert, HeaderBar } from '../../components';
 import { CONSTANTS } from '../../constants';
 import strings from '../../localization';
 

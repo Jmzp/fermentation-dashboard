@@ -9,4 +9,13 @@ export default {
     phAverage: 'pH Promedio',
     temperatureAverage: 'Temperatura Promedio',
   },
+  generateReport: {
+    loadingDocument: 'Cargando Documento...',
+    downloadNow: '¡Descargar Ahora!',
+    ph: 'pH',
+    average: 'Promedio',
+    time: 'Tiempo',
+    temperature: 'Temperatura',
+    fermentationProcess: 'Proceso de Fermentación',
+  },
 };

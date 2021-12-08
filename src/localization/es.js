@@ -5,4 +5,8 @@ export default {
     phError: 'Ocurrió un error al obtener el pH',
     temperatureError: 'Ocurrió un error al obtener la Temperatura',
   },
+  home: {
+    phAverage: 'pH Promedio',
+    temperatureAverage: 'Temperatura Promedio',
+  },
 };

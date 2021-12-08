@@ -20,9 +20,24 @@ const useStyles = makeStyles({
   title: {
     ...TextStyles.poppinsRegularText,
   },
+  cardHeader: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  averageContainer: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: 10,
+  },
+  averageValue: {
+    marginTop: 5,
+    marginLeft: 10,
+  },
   dateRangeContainer: {
     display: 'flex',
     flexDirection: 'row',
+    flex: 1,
     justifyContent: 'flex-end',
     marginBottom: 20,
   },

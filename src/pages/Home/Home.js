@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
-  Card, CardContent, CircularProgress, Container, CssBaseline, Snackbar,
+  Card, CardContent, CircularProgress, Container, CssBaseline, Snackbar, Typography,
 } from '@material-ui/core';
 import { DatePicker } from '@material-ui/pickers';
 import { observer } from 'mobx-react';
@@ -10,109 +10,9 @@ import HeaderBar from '../../components/HeaderBar';
 import { useStores } from '../../stores';
 import { Alert } from '../../components';
 import { CONSTANTS } from '../../constants';
+import strings from '../../localization';
 
 const HIDE_DURATION = 6000;
-const time = [
-  1,
-  2,
-  3,
-  4,
-  5,
-  6,
-  7,
-  8,
-  9,
-  10,
-  11,
-  12,
-  13,
-  14,
-  15,
-  16,
-  17,
-  18,
-  19,
-  20,
-  21,
-  22,
-  23,
-  24,
-  25,
-  26,
-  27,
-  28,
-  29,
-  30,
-  31,
-  32,
-  33,
-  34,
-  35,
-  36,
-  37,
-  38,
-  39,
-  40,
-  41,
-  42,
-  43,
-  44,
-  45,
-  46,
-  47,
-  48,
-];
-const ph = [
-  5.5,
-  5.49,
-  5.51,
-  5.51,
-  5.49,
-  5.46,
-  5.44,
-  5.41,
-  5.38,
-  5.32,
-  5.29,
-  5.21,
-  5.12,
-  5.09,
-  5,
-  4.97,
-  4.95,
-  4.82,
-  4.73,
-  4.68,
-  4.59,
-  4.39,
-  4.32,
-  4.28,
-  4.25,
-  4.21,
-  4.23,
-  4.18,
-  4.18,
-  4.16,
-  4.15,
-  4.15,
-  4.17,
-  4.15,
-  4.15,
-  4.14,
-  4.13,
-  4.15,
-  4.16,
-  4.13,
-  4.14,
-  4.15,
-  4.14,
-  4.13,
-  4.15,
-  4.15,
-  4.14,
-  4.15,
-];
-const temperature = [...ph].reverse();
 
 const options = {
   scales: {
@@ -147,13 +47,13 @@ const Home = () => {
 
   const getPhFromInterval = async () => {
     setIsLoading(true);
-    phStore.loadPhByInterval(phVsTimeStartDate, phVsTimeEndDate);
+    await phStore.loadPhByInterval(phVsTimeStartDate, phVsTimeEndDate);
     setIsLoading(false);
   };
 
   const getTemperatureFromInterval = async () => {
     setIsLoading(true);
-    temperatureStore.loadTemperatureByInterval(tempVsTimeStartDate, tempVsTimeEndDate);
+    await temperatureStore.loadTemperatureByInterval(tempVsTimeStartDate, tempVsTimeEndDate);
     setIsLoading(false);
   };
 
@@ -179,30 +79,30 @@ const Home = () => {
   }, [errorStore.currentError]);
 
   const dataPhTimeConfig = useMemo(() => ({
-    labels: time,
+    labels: phStore.phObject.time,
     datasets: [
       {
         label: 'pH',
-        data: ph,
+        data: phStore.phObject.ph,
         fill: false,
         backgroundColor: 'rgba(245, 162, 22, 0.96)',
         borderColor: 'rgba(168, 106, 0, 0.2)',
       },
     ],
-  }), []);
+  }), [phStore.phObject]);
 
   const dataTemperatureTimeConfig = useMemo(() => ({
-    labels: time,
+    labels: temperatureStore.temperatureObject.time,
     datasets: [
       {
-        label: 'temperature',
-        data: temperature,
+        label: 'Temperatura',
+        data: temperatureStore.temperatureObject.temperature,
         fill: false,
         backgroundColor: 'rgb(255, 99, 132)',
         borderColor: 'rgba(255, 99, 132, 0.2)',
       },
     ],
-  }), []);
+  }), [temperatureStore.temperatureObject]);
 
   return (
     <>
@@ -217,60 +117,80 @@ const Home = () => {
           <>
             <Card className={classes.cardContainer}>
               <CardContent>
-                <div className={classes.dateRangeContainer}>
-                  <div className={classes.dateContainer}>
-                    <DatePicker
-                      openTo="date"
-                      label="Inicio"
-                      format="dddd/MM/yyyy"
-                      views={['year', 'month', 'date']}
-                      value={phVsTimeStartDate}
-                      onChange={setPhVsTimeStartDate}
-                    />
+                <div className={classes.cardHeader}>
+                  <div className={classes.averageContainer}>
+                    <Typography variant="h6">
+                      {`${strings.home.phAverage}: `}
+                    </Typography>
+                    <Typography variant="body1" className={classes.averageValue}>
+                      {phStore.averageOfPh.toFixed(2)}
+                    </Typography>
                   </div>
-                  <div className={classes.dateContainer}>
-                    <DatePicker
-                      openTo="date"
-                      label="Fin"
-                      format="dddd/MM/yyyy"
-                      views={['year', 'month', 'date']}
-                      value={phVsTimeEndDate}
-                      onChange={setPhVsTimeEndDate}
-                    />
+                  <div className={classes.dateRangeContainer}>
+                    <div className={classes.dateContainer}>
+                      <DatePicker
+                        openTo="date"
+                        label="Inicio"
+                        format="dddd/MM/yyyy"
+                        views={['year', 'month', 'date']}
+                        value={phVsTimeStartDate}
+                        onChange={setPhVsTimeStartDate}
+                      />
+                    </div>
+                    <div className={classes.dateContainer}>
+                      <DatePicker
+                        openTo="date"
+                        label="Fin"
+                        format="dddd/MM/yyyy"
+                        views={['year', 'month', 'date']}
+                        value={phVsTimeEndDate}
+                        onChange={setPhVsTimeEndDate}
+                      />
+                    </div>
                   </div>
                 </div>
                 <div>
-                  <h1 className={classes.title}>pH vs Tiempo (Horas)</h1>
+                  <h1 className={classes.title}>pH vs Tiempo</h1>
                 </div>
                 <Line data={dataPhTimeConfig} options={options} />
               </CardContent>
             </Card>
             <Card className={classes.cardContainer}>
               <CardContent>
-                <div className={classes.dateRangeContainer}>
-                  <div className={classes.dateContainer}>
-                    <DatePicker
-                      openTo="date"
-                      label="Inicio"
-                      format="dddd/MM/yyyy"
-                      views={['year', 'month', 'date']}
-                      value={tempVsTimeStartDate}
-                      onChange={setTempVsTimeStartDate}
-                    />
+                <div className={classes.cardHeader}>
+                  <div className={classes.averageContainer}>
+                    <Typography variant="h6">
+                      {`${strings.home.temperatureAverage}: `}
+                    </Typography>
+                    <Typography variant="body1" className={classes.averageValue}>
+                      {temperatureStore.averageOfTemperature.toFixed(2)}
+                    </Typography>
                   </div>
-                  <div className={classes.dateContainer}>
-                    <DatePicker
-                      openTo="date"
-                      label="Fin"
-                      format="dddd/MM/yyyy"
-                      views={['year', 'month', 'date']}
-                      value={tempVsTimeEndDate}
-                      onChange={setTempVsTimeEndDate}
-                    />
+                  <div className={classes.dateRangeContainer}>
+                    <div className={classes.dateContainer}>
+                      <DatePicker
+                        openTo="date"
+                        label="Inicio"
+                        format="dddd/MM/yyyy"
+                        views={['year', 'month', 'date']}
+                        value={tempVsTimeStartDate}
+                        onChange={setTempVsTimeStartDate}
+                      />
+                    </div>
+                    <div className={classes.dateContainer}>
+                      <DatePicker
+                        openTo="date"
+                        label="Fin"
+                        format="dddd/MM/yyyy"
+                        views={['year', 'month', 'date']}
+                        value={tempVsTimeEndDate}
+                        onChange={setTempVsTimeEndDate}
+                      />
+                    </div>
                   </div>
                 </div>
                 <div>
-                  <h1 className={classes.title}>Temperatura vs Tiempo (Horas)</h1>
+                  <h1 className={classes.title}>Temperatura vs Tiempo</h1>
                 </div>
                 <Line data={dataTemperatureTimeConfig} options={options} />
               </CardContent>

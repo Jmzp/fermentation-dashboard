@@ -17,6 +17,7 @@ class TemperatureStore {
       temperatureObject: observable,
       loadTemperatureByInterval: flow,
       averageOfTemperature: computed,
+      maxValueOfTemperature: computed,
     });
   }
 
@@ -86,6 +87,13 @@ class TemperatureStore {
       const sum = this.temperatureObject.temperature
         .reduce((previousValue, currentValue) => previousValue + currentValue);
       return sum / this.temperatureObject.temperature.length;
+    }
+    return 0;
+  }
+
+  get maxValueOfTemperature() {
+    if (this.temperatureObject.temperature.length) {
+      return Math.max(...this.temperatureObject.temperature);
     }
     return 0;
   }

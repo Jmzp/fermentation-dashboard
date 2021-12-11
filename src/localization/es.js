@@ -8,12 +8,14 @@ export default {
   home: {
     phAverage: 'pH Promedio',
     temperatureAverage: 'Temperatura Promedio',
+    maxValue: 'Valor Máximo',
   },
   generateReport: {
     loadingDocument: 'Cargando Documento...',
     downloadNow: '¡Descargar Ahora!',
     ph: 'pH',
     average: 'Promedio',
+    maxValue: 'Valor Máximo',
     time: 'Tiempo',
     temperature: 'Temperatura',
     fermentationProcess: 'Proceso de Fermentación',

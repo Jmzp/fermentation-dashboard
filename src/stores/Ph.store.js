@@ -17,6 +17,7 @@ class PhStore {
       phObject: observable,
       loadPhByInterval: flow,
       averageOfPh: computed,
+      maxValueOfPh: computed,
     });
   }
 
@@ -84,6 +85,13 @@ class PhStore {
       const sum = this.phObject.ph
         .reduce((previousValue, currentValue) => previousValue + currentValue);
       return sum / this.phObject.ph.length;
+    }
+    return 0;
+  }
+
+  get maxValueOfPh() {
+    if (this.phObject.ph.length) {
+      return Math.max(...this.phObject.ph);
     }
     return 0;
   }

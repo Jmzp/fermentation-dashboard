@@ -24,13 +24,13 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'row',
   },
-  averageContainer: {
+  textContainer: {
     flex: 1,
     display: 'flex',
     flexDirection: 'row',
     marginTop: 10,
   },
-  averageValue: {
+  textValue: {
     marginTop: 5,
     marginLeft: 10,
   },

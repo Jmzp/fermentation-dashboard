@@ -3,6 +3,7 @@ import {
   Page, Text, View, Document, StyleSheet,
 } from '@react-pdf/renderer';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import strings from '../../../localization';
 
 const styles = StyleSheet.create({
@@ -11,11 +12,21 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   pageHeader: {
+    flexDirection: 'column',
     alignItems: 'center',
     marginBottom: 40,
   },
   title: {
     fontSize: 28,
+  },
+  subTitle: {
+    color: '#a33333',
+  },
+  date: {
+    fontSize: 14,
+  },
+  description: {
+    fontSize: 14,
   },
   pageContent: {
     flexDirection: 'row',
@@ -50,7 +61,7 @@ const styles = StyleSheet.create({
 // Create Document Component
 const DataReport = (props) => {
   const {
-    phObject, phAverage, temperatureObject, temperatureAverage,
+    phObject, phAverage, phMax, temperatureObject, temperatureAverage, temperatureMax,
   } = props;
 
   const renderPhValues = () => {
@@ -97,12 +108,14 @@ const DataReport = (props) => {
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={styles.pageHeader}>
+          <Text style={styles.date}>{moment().format('DD/MM/YYYY - HH:mm')}</Text>
           <Text style={styles.title}>{strings.generateReport.fermentationProcess}</Text>
         </View>
         <View style={styles.pageContent}>
           <View style={styles.section}>
-            <Text>{strings.generateReport.ph}</Text>
-            <Text>{`${strings.generateReport.average}: ${phAverage.toFixed(2)}`}</Text>
+            <Text style={styles.subTitle}>{strings.generateReport.ph}</Text>
+            <Text style={styles.description}>{`${strings.generateReport.average}: ${phAverage.toFixed(2)}`}</Text>
+            <Text style={styles.description}>{`${strings.generateReport.maxValue}: ${phMax}`}</Text>
             <View style={styles.table}>
               <View style={styles.tableRow}>
                 <View style={styles.tableColumn}>
@@ -116,8 +129,9 @@ const DataReport = (props) => {
             </View>
           </View>
           <View style={styles.section}>
-            <Text>{strings.generateReport.temperature}</Text>
-            <Text>{`${strings.generateReport.average}: ${temperatureAverage.toFixed(2)}`}</Text>
+            <Text style={styles.subTitle}>{strings.generateReport.temperature}</Text>
+            <Text style={styles.description}>{`${strings.generateReport.average}: ${temperatureAverage.toFixed(2)}`}</Text>
+            <Text style={styles.description}>{`${strings.generateReport.maxValue}: ${temperatureMax}`}</Text>
             <View style={styles.table}>
               <View style={styles.tableRow}>
                 <View style={styles.tableColumn}>
@@ -139,8 +153,10 @@ const DataReport = (props) => {
 DataReport.propTypes = {
   phObject: PropTypes.object.isRequired,
   phAverage: PropTypes.number.isRequired,
+  phMax: PropTypes.number.isRequired,
   temperatureObject: PropTypes.object.isRequired,
   temperatureAverage: PropTypes.number.isRequired,
+  temperatureMax: PropTypes.number.isRequired,
 };
 
 export default DataReport;

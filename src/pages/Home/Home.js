@@ -117,12 +117,20 @@ const Home = () => {
             <Card className={classes.cardContainer}>
               <CardContent>
                 <div className={classes.cardHeader}>
-                  <div className={classes.averageContainer}>
+                  <div className={classes.textContainer}>
                     <Typography variant="h6">
                       {`${strings.home.phAverage}: `}
                     </Typography>
-                    <Typography variant="body1" className={classes.averageValue}>
+                    <Typography variant="body1" className={classes.textValue}>
                       {phStore.averageOfPh.toFixed(2)}
+                    </Typography>
+                  </div>
+                  <div className={classes.textContainer}>
+                    <Typography variant="h6">
+                      {`${strings.home.maxValue}: `}
+                    </Typography>
+                    <Typography variant="body1" className={classes.textValue}>
+                      {phStore.maxValueOfPh}
                     </Typography>
                   </div>
                   <div className={classes.dateRangeContainer}>
@@ -157,12 +165,20 @@ const Home = () => {
             <Card className={classes.cardContainer}>
               <CardContent>
                 <div className={classes.cardHeader}>
-                  <div className={classes.averageContainer}>
+                  <div className={classes.textContainer}>
                     <Typography variant="h6">
                       {`${strings.home.temperatureAverage}: `}
                     </Typography>
-                    <Typography variant="body1" className={classes.averageValue}>
+                    <Typography variant="body1" className={classes.textValue}>
                       {temperatureStore.averageOfTemperature.toFixed(2)}
+                    </Typography>
+                  </div>
+                  <div className={classes.textContainer}>
+                    <Typography variant="h6">
+                      {`${strings.home.maxValue}: `}
+                    </Typography>
+                    <Typography variant="body1" className={classes.textValue}>
+                      {temperatureStore.maxValueOfTemperature}
                     </Typography>
                   </div>
                   <div className={classes.dateRangeContainer}>

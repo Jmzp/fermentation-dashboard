@@ -16,8 +16,10 @@ const GenerateReport = () => {
           <DataReport
             phObject={phStore.phObject}
             phAverage={phStore.averageOfPh}
+            phMax={phStore.maxValueOfPh}
             temperatureObject={temperatureStore.temperatureObject}
             temperatureAverage={temperatureStore.averageOfTemperature}
+            temperatureMax={temperatureStore.maxValueOfTemperature}
           />
         )}
         fileName="fermentation-report.pdf"

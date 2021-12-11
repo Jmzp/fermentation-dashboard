@@ -17,12 +17,25 @@ const useStyles = makeStyles({
   cardContainer: {
     marginTop: 20,
   },
-  title: {
-    ...TextStyles.poppinsRegularText,
-  },
   cardHeader: {
     display: 'flex',
     flexDirection: 'row',
+  },
+  cardSubHeader: {
+    flex: 1,
+    flexDirection: 'row',
+    display: 'flex',
+    marginTop: 20,
+  },
+  title: {
+    flex: 1,
+    ...TextStyles.poppinsRegularText,
+  },
+  alertButtonContainer: {
+    alignItems: 'flex-end',
+  },
+  chartContainer: {
+    marginTop: 20,
   },
   textContainer: {
     flex: 1,

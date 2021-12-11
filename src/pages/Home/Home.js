@@ -1,7 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
-  Card, CardContent, CircularProgress, Container, CssBaseline, Snackbar, Typography,
+  Button,
+  Card,
+  CardContent,
+  CircularProgress,
+  Container,
+  Snackbar,
+  Typography,
 } from '@material-ui/core';
 import { DatePicker } from '@material-ui/pickers';
 import { observer } from 'mobx-react';
@@ -10,6 +16,7 @@ import { useStores } from '../../stores';
 import { Alert, HeaderBar } from '../../components';
 import { CONSTANTS } from '../../constants';
 import strings from '../../localization';
+import AlertDialog from './AlertDialog';
 
 const HIDE_DURATION = 6000;
 
@@ -34,6 +41,8 @@ const Home = () => {
   const [tempVsTimeStartDate, setTempVsTimeStartDate] = useState(TODAY);
   const [tempVsTimeEndDate, setTempVsTimeEndDate] = useState(TOMORROW);
   const [isSnackErrorVisible, setSnackErrorVisibility] = useState(false);
+  const [isPhAlertModalVisible, setPhAlertModalVisibility] = useState(false);
+  const [isTemperatureAlertModalVisible, setTemperatureAlertModalVisibility] = useState(false);
   const { errorStore, phStore, temperatureStore } = useStores();
 
   const handleCloseSnackError = (_event, reason) => {
@@ -54,6 +63,22 @@ const Home = () => {
     setIsLoading(true);
     await temperatureStore.loadTemperatureByInterval(tempVsTimeStartDate, tempVsTimeEndDate);
     setIsLoading(false);
+  };
+
+  const openPhAlertModal = () => {
+    setPhAlertModalVisibility(true);
+  };
+
+  const closePhAlertModal = () => {
+    setPhAlertModalVisibility(false);
+  };
+
+  const openTemperatureAlertModal = () => {
+    setTemperatureAlertModalVisibility(true);
+  };
+
+  const closeTemperatureAlertModal = () => {
+    setTemperatureAlertModalVisibility(false);
   };
 
   useEffect(() => {
@@ -105,7 +130,6 @@ const Home = () => {
 
   return (
     <>
-      <CssBaseline />
       <HeaderBar />
       <Container className={classes.mainContainer}>
         {isLoading ? (
@@ -156,10 +180,17 @@ const Home = () => {
                     </div>
                   </div>
                 </div>
-                <div>
+                <div className={classes.cardSubHeader}>
                   <h1 className={classes.title}>pH vs Tiempo</h1>
+                  <div className={classes.alertButtonContainer}>
+                    <Button variant="contained" color="secondary" onClick={openPhAlertModal}>
+                      {strings.home.manageAlert}
+                    </Button>
+                  </div>
                 </div>
-                <Line data={dataPhTimeConfig} options={options} />
+                <div className={classes.chartContainer}>
+                  <Line data={dataPhTimeConfig} options={options} />
+                </div>
               </CardContent>
             </Card>
             <Card className={classes.cardContainer}>
@@ -204,15 +235,38 @@ const Home = () => {
                     </div>
                   </div>
                 </div>
-                <div>
+                <div className={classes.cardSubHeader}>
                   <h1 className={classes.title}>Temperatura vs Tiempo</h1>
+                  <div className={classes.alertButtonContainer}>
+                    <Button variant="contained" color="secondary" onClick={openTemperatureAlertModal}>
+                      {strings.home.manageAlert}
+                    </Button>
+                  </div>
                 </div>
-                <Line data={dataTemperatureTimeConfig} options={options} />
+                <div className={classes.chartContainer}>
+                  <Line data={dataTemperatureTimeConfig} options={options} />
+                </div>
               </CardContent>
             </Card>
           </>
         )}
       </Container>
+      <AlertDialog
+        isOpen={isPhAlertModalVisible}
+        title={strings.home.managePhAlert}
+        textFieldLabel={strings.home.phValue}
+        onSave={() => console.log('save pressed')}
+        onCancel={closePhAlertModal}
+        onClose={closePhAlertModal}
+      />
+      <AlertDialog
+        isOpen={isTemperatureAlertModalVisible}
+        title={strings.home.manageTemperatureAlert}
+        textFieldLabel={strings.home.temperatureValue}
+        onSave={() => console.log('save pressed')}
+        onCancel={closeTemperatureAlertModal}
+        onClose={closeTemperatureAlertModal}
+      />
       <Snackbar
         open={isSnackErrorVisible}
         autoHideDuration={HIDE_DURATION}

@@ -4,6 +4,10 @@ export default {
     pageNotFound: 'Página no encontrada',
     phError: 'Ocurrió un error al obtener el pH',
     temperatureError: 'Ocurrió un error al obtener la Temperatura',
+    getAlertsError: 'Oucrrió un error al tratar de obtener las alertas',
+    createAlertError: 'Oucrrió un error al tratar de crear la alerta',
+    updateAlertError: 'Oucrrió un error al tratar de actualizar la alerta',
+    deleteAlertError: 'Oucrrió un error al tratar de borrar la alerta',
   },
   actions: {
     save: 'Guardar',

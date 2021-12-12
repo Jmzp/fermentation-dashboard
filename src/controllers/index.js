@@ -2,3 +2,4 @@
 export { default as HttpClient } from './HttpClient';
 export { default as PhController } from './PhController';
 export { default as TemperatureController } from './TemperatureController';
+export { default as AlertsController } from './AlertsController';

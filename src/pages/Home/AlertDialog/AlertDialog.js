@@ -7,7 +7,7 @@ import {
   DialogTitle,
   TextField,
 } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import strings from '../../../localization';
 import useStyles from './AlertDialog.styles';
@@ -15,7 +15,7 @@ import useStyles from './AlertDialog.styles';
 const AlertDialog = (props) => {
   const classes = useStyles();
   const {
-    isOpen, onClose, onCancel, onSave, title, textFieldLabel,
+    isOpen, onClose, onDelete, onCancel, onSave, title, textFieldLabel, textFieldInitialValue,
   } = props;
   const [textFieldValue, setTextFieldValue] = useState('');
 
@@ -25,6 +25,10 @@ const AlertDialog = (props) => {
       setTextFieldValue(value);
     }
   };
+
+  useEffect(() => {
+    setTextFieldValue(textFieldInitialValue);
+  }, [textFieldInitialValue]);
 
   return (
     <Dialog open={isOpen} onClose={onClose}>
@@ -40,6 +44,9 @@ const AlertDialog = (props) => {
         </div>
       </DialogContent>
       <DialogActions>
+        <Button onClick={onDelete} color="secondary">
+          {strings.actions.delete}
+        </Button>
         <Button onClick={onCancel} color="primary">
           {strings.actions.cancel}
         </Button>
@@ -54,10 +61,16 @@ const AlertDialog = (props) => {
 AlertDialog.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   textFieldLabel: PropTypes.string.isRequired,
+  textFieldInitialValue: PropTypes.string,
+};
+
+AlertDialog.defaultProps = {
+  textFieldInitialValue: '',
 };
 
 export default AlertDialog;

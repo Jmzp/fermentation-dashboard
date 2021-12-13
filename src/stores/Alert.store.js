@@ -4,9 +4,9 @@ import { CONSTANTS } from '../constants';
 import strings from '../localization';
 
 class AlertStore {
-  phAlert = '';
+  phAlert = {};
 
-  temperatureAlert = '';
+  temperatureAlert = {};
 
   constructor(rootStore) {
     this.rootStore = rootStore;
@@ -32,34 +32,43 @@ class AlertStore {
         }
       }
     } catch (e) {
-      this.rootStore.setCurrentError(strings.errors.getAlertsError);
+      this.rootStore.errorStore.setCurrentError(strings.errors.getAlertsError);
     }
   }
 
   * createAlert(type, value) {
     try {
-      const { data: { data } } = yield AlertsController.createAlert(type, value);
-      console.log(data);
+      yield AlertsController.createAlert(type, value);
+      return true;
     } catch (e) {
-      this.rootStore.setCurrentError(strings.errors.createAlertError);
+      this.rootStore.errorStore.setCurrentError(strings.errors.createAlertError);
+      return false;
     }
   }
 
   * updateAlert(id, value) {
     try {
-      const { data: { data } } = yield AlertsController.updateAlert(id, value);
-      console.log(data);
+      yield AlertsController.updateAlert(id, value);
+      return true;
     } catch (e) {
-      this.rootStore.setCurrentError(strings.errors.updateAlertError);
+      this.rootStore.errorStore.setCurrentError(strings.errors.updateAlertError);
+      return false;
     }
   }
 
   * deleteArt(id) {
     try {
-      const { data: { data } } = yield AlertsController.deleteAlert(id);
-      console.log(data);
+      yield AlertsController.deleteAlert(id);
+      if (this.phAlert.id === id) {
+        this.phAlert = {};
+      }
+      if (this.temperatureAlert.id === id) {
+        this.temperatureAlert = {};
+      }
+      return true;
     } catch (e) {
-      this.rootStore.setCurrentError(strings.errors.deleteAlertError);
+      this.rootStore.errorStore.setCurrentError(strings.errors.deleteAlertError);
+      return false;
     }
   }
 }

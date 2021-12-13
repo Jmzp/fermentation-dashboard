@@ -1,4 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import { Line } from 'react-chartjs-2';
 import {
   Button,
@@ -11,6 +13,7 @@ import {
 } from '@material-ui/core';
 import { DatePicker } from '@material-ui/pickers';
 import { observer } from 'mobx-react';
+import { useAlert } from 'react-alert';
 import useStyles from './Home.styles';
 import { useStores } from '../../stores';
 import { Alert, HeaderBar } from '../../components';
@@ -43,7 +46,10 @@ const Home = () => {
   const [isSnackErrorVisible, setSnackErrorVisibility] = useState(false);
   const [isPhAlertModalVisible, setPhAlertModalVisibility] = useState(false);
   const [isTemperatureAlertModalVisible, setTemperatureAlertModalVisibility] = useState(false);
-  const { errorStore, phStore, temperatureStore } = useStores();
+  const {
+    errorStore, phStore, temperatureStore, alertStore,
+  } = useStores();
+  const alert = useAlert();
 
   const handleCloseSnackError = (_event, reason) => {
     if (reason === CONSTANTS.CLICKAWAY) {
@@ -81,6 +87,77 @@ const Home = () => {
     setTemperatureAlertModalVisibility(false);
   };
 
+  const showMessageAlert = useCallback((message) => {
+    alert.show(message, {
+      title: '',
+      closeCopy: strings.actions.ok,
+    });
+  }, [alert]);
+
+  const savePhAlert = useCallback(async (value) => {
+    const { phAlert } = alertStore;
+    closePhAlertModal();
+    setIsLoading(true);
+    if (Object.keys(phAlert).length) {
+      const result = await alertStore.updateAlert(phAlert.id, value);
+      if (result) {
+        showMessageAlert(strings.messages.alertUpdated);
+      }
+    } else {
+      const result = await alertStore.createAlert(CONSTANTS.ALERTS_TYPE.ph, value);
+      if (result) {
+        showMessageAlert(strings.messages.alertSaved);
+      }
+    }
+    await alertStore.loadAlerts();
+    setIsLoading(false);
+  }, [alertStore]);
+
+  const saveTemperatureAlert = useCallback(async (value) => {
+    const { temperatureAlert } = alertStore;
+    closeTemperatureAlertModal();
+    setIsLoading(true);
+    if (Object.keys(temperatureAlert).length) {
+      const result = await alertStore.updateAlert(temperatureAlert.id, value);
+      if (result) {
+        showMessageAlert(strings.messages.alertUpdated);
+      }
+    } else {
+      const result = await alertStore.createAlert(CONSTANTS.ALERTS_TYPE.temperature, value);
+      if (result) {
+        showMessageAlert(strings.messages.alertSaved);
+      }
+    }
+    await alertStore.loadAlerts();
+    setIsLoading(false);
+  }, [alertStore]);
+
+  const deletePhAlert = useCallback(async () => {
+    const { phAlert } = alertStore;
+    closePhAlertModal();
+    setIsLoading(true);
+    if (Object.keys(phAlert).length) {
+      const result = await alertStore.deleteArt(phAlert.id);
+      if (result) {
+        showMessageAlert(strings.messages.alertDeleted);
+      }
+    }
+    setIsLoading(false);
+  }, [alertStore]);
+
+  const deleteTemperatureAlert = useCallback(async () => {
+    const { temperatureAlert } = alertStore;
+    closeTemperatureAlertModal();
+    setIsLoading(true);
+    if (Object.keys(temperatureAlert).length) {
+      const result = await alertStore.deleteArt(temperatureAlert.id);
+      if (result) {
+        showMessageAlert(strings.messages.alertDeleted);
+      }
+    }
+    setIsLoading(false);
+  }, [alertStore]);
+
   useEffect(() => {
     const asyncFunction = async () => {
       await getPhFromInterval();
@@ -94,6 +171,13 @@ const Home = () => {
     };
     asyncFunction();
   }, [tempVsTimeStartDate, tempVsTimeEndDate]);
+
+  useEffect(() => {
+    const asyncFunction = async () => {
+      await alertStore.loadAlerts();
+    };
+    asyncFunction();
+  }, []);
 
   useEffect(() => {
     const { currentError } = errorStore;
@@ -255,7 +339,9 @@ const Home = () => {
         isOpen={isPhAlertModalVisible}
         title={strings.home.managePhAlert}
         textFieldLabel={strings.home.phValue}
-        onSave={() => console.log('save pressed')}
+        textFieldInitialValue={Object.keys(alertStore.phAlert).length ? alertStore.phAlert.value : ''}
+        onSave={savePhAlert}
+        onDelete={deletePhAlert}
         onCancel={closePhAlertModal}
         onClose={closePhAlertModal}
       />
@@ -263,7 +349,9 @@ const Home = () => {
         isOpen={isTemperatureAlertModalVisible}
         title={strings.home.manageTemperatureAlert}
         textFieldLabel={strings.home.temperatureValue}
-        onSave={() => console.log('save pressed')}
+        textFieldInitialValue={Object.keys(alertStore.temperatureAlert).length ? alertStore.temperatureAlert.value : ''}
+        onDelete={deleteTemperatureAlert}
+        onSave={saveTemperatureAlert}
         onCancel={closeTemperatureAlertModal}
         onClose={closeTemperatureAlertModal}
       />

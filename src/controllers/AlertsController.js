@@ -27,7 +27,7 @@ class AlertsController {
   }
 
   static async deleteAlert(idAlert) {
-    return HttpClient.patch(`${API_ENDPOINT_TWO}/${idAlert}`);
+    return HttpClient.delete(`${API_ENDPOINT_TWO}/${idAlert}`);
   }
 }
 

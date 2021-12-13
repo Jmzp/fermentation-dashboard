@@ -12,6 +12,13 @@ export default {
   actions: {
     save: 'Guardar',
     cancel: 'Cancelar',
+    delete: 'Borrar',
+    ok: 'Borrar',
+  },
+  messages: {
+    alertSaved: '¡Alerta guardada con éxito!',
+    alertUpdated: '¡Alerta actualizada con éxito!',
+    alertDeleted: '¡Alerta borrada con éxito!',
   },
   home: {
     phAverage: 'pH Promedio',

@@ -13,7 +13,7 @@ export default {
     save: 'Guardar',
     cancel: 'Cancelar',
     delete: 'Eliminar',
-    ok: 'Borrar',
+    ok: 'OK',
   },
   messages: {
     alertSaved: '¡Alerta guardada con éxito!',

@@ -12,7 +12,7 @@ export default {
   actions: {
     save: 'Guardar',
     cancel: 'Cancelar',
-    delete: 'Borrar',
+    delete: 'Eliminar',
     ok: 'Borrar',
   },
   messages: {
